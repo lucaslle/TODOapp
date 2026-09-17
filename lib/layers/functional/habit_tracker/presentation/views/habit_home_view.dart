@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../technical/theme/cadence_colors.dart';
-import '../../../../technical/theme/cadence_icons.dart';
-import '../../../../technical/theme/cadence_motion.dart';
-import '../../../../technical/theme/widgets/pressable.dart';
 import '../../domain/entities/habit_board.dart';
 import '../../domain/entities/routine.dart';
 import '../../domain/entities/task.dart';
@@ -195,15 +192,6 @@ class _HabitHomeViewState extends State<HabitHomeView>
               Positioned.fill(
                 child: SafeArea(bottom: false, child: _buildTab(state, board)),
               ),
-              if (state.tab == AppTab.today)
-                Positioned(
-                  right: 20,
-                  bottom: 104,
-                  child: _AddButton(
-                    isAnimated: state.areEffectsEnabled,
-                    onPressed: () => _openComposer(tabIndex: 0),
-                  ),
-                ),
               Positioned(
                 left: 14,
                 right: 14,
@@ -215,6 +203,7 @@ class _HabitHomeViewState extends State<HabitHomeView>
                     isAnimated: state.areEffectsEnabled,
                     onTabSelected: (AppTab tab) =>
                         context.read<HabitCubit>().selectTab(tab),
+                    onAddPressed: () => _openComposer(tabIndex: 0),
                   ),
                 ),
               ),
@@ -231,41 +220,6 @@ class _HabitHomeViewState extends State<HabitHomeView>
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-class _AddButton extends StatelessWidget {
-  const _AddButton({required this.isAnimated, required this.onPressed});
-
-  final bool isAnimated;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onPressed: onPressed,
-      pressedScale: 0.9,
-      isAnimated: isAnimated,
-      semanticLabel: 'Nouvelle tâche',
-      child: AnimatedContainer(
-        duration: isAnimated ? CadenceMotion.base : CadenceMotion.instant,
-        width: 56,
-        height: 56,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: CadenceColors.white,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: Color(0xA6000000),
-              blurRadius: 34,
-              offset: Offset(0, 14),
-            ),
-          ],
-        ),
-        child: Icon(CadenceIcons.plus, size: 24, color: CadenceColors.onWhite),
       ),
     );
   }

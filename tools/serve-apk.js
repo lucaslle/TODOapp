@@ -5,8 +5,8 @@ const os = require('os');
 
 const APK_DIR = path.join(__dirname, '..', 'build', 'app', 'outputs', 'flutter-apk');
 const VARIANTS = {
-  '/cadence.apk': 'app-arm64-v8a-release.apk',
-  '/cadence-universel.apk': 'app-release.apk',
+  '/momentum.apk': 'app-arm64-v8a-release.apk',
+  '/momentum-universel.apk': 'app-release.apk',
 };
 const PORT = 8000;
 
@@ -30,7 +30,7 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
     res.end(`<meta name=viewport content="width=device-width,initial-scale=1">
       <body style="font:16px system-ui;background:#0b0b0e;color:#f2f2f2;padding:32px">
-      <h1 style="letter-spacing:-.04em">Cadence</h1><ul style="line-height:2">${links}</ul>`);
+      <h1 style="letter-spacing:-.04em">Momentum</h1><ul style="line-height:2">${links}</ul>`);
     return;
   }
 

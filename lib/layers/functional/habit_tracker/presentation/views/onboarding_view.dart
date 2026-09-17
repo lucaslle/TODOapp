@@ -35,7 +35,7 @@ class _OnboardingViewState extends State<OnboardingView> {
       <({String title, String body, String cta})>[
         (
           title: 'Des petites choses, tenues.',
-          body: 'Cadence transforme une liste quotidienne en un rythme que tu '
+          body: 'Momentum transforme une liste quotidienne en un rythme que tu '
               'vois.',
           cta: 'Continuer',
         ),

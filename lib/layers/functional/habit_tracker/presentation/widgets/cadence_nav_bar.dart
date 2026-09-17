@@ -4,20 +4,24 @@ import '../../../../technical/theme/cadence_colors.dart';
 import '../../../../technical/theme/cadence_icons.dart';
 import '../../../../technical/theme/cadence_motion.dart';
 import '../../../../technical/theme/cadence_text_styles.dart';
+import '../../../../technical/theme/widgets/pressable.dart';
 import '../cubit/habit_state.dart';
 
 /// Floating glass pill at the bottom of every screen. The active tab is a
 /// solid lighter chip — the only place in the app where two whites meet.
+/// The white "+" sits dead center, splitting the four tabs two and two.
 class CadenceNavBar extends StatelessWidget {
   const CadenceNavBar({
     required this.currentTab,
     required this.onTabSelected,
+    required this.onAddPressed,
     required this.isAnimated,
     super.key,
   });
 
   final AppTab currentTab;
   final ValueChanged<AppTab> onTabSelected;
+  final VoidCallback onAddPressed;
   final bool isAnimated;
 
   static const List<({AppTab tab, String label})> _items =
@@ -67,7 +71,20 @@ class CadenceNavBar extends StatelessWidget {
           color: const Color(0x14FFFFFF),
           child: Row(
             children: <Widget>[
-              for (final ({AppTab tab, String label}) item in _items)
+              for (final ({AppTab tab, String label}) item
+                  in _items.sublist(0, 2))
+                Expanded(
+                  child: _NavItem(
+                    label: item.label,
+                    icon: _iconFor(item.tab, isActive: item.tab == currentTab),
+                    isActive: item.tab == currentTab,
+                    isAnimated: isAnimated,
+                    onPressed: () => onTabSelected(item.tab),
+                  ),
+                ),
+              _AddButton(isAnimated: isAnimated, onPressed: onAddPressed),
+              for (final ({AppTab tab, String label}) item
+                  in _items.sublist(2))
                 Expanded(
                   child: _NavItem(
                     label: item.label,
@@ -79,6 +96,45 @@ class CadenceNavBar extends StatelessWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The white "+" at the center of the bar — the one accent surface, always a
+/// tap away whatever tab you're on.
+class _AddButton extends StatelessWidget {
+  const _AddButton({required this.isAnimated, required this.onPressed});
+
+  final bool isAnimated;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Pressable(
+        onPressed: onPressed,
+        pressedScale: 0.9,
+        isAnimated: isAnimated,
+        semanticLabel: 'Nouvelle tâche',
+        child: Container(
+          width: 52,
+          height: 52,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: CadenceColors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Color(0x99000000),
+                blurRadius: 24,
+                offset: Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Icon(CadenceIcons.plus, size: 24, color: CadenceColors.onWhite),
         ),
       ),
     );
