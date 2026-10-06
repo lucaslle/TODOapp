@@ -1,3 +1,5 @@
+﻿import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 
 import '../../../../technical/theme/cadence_colors.dart';
@@ -17,6 +19,7 @@ class ProfileView extends StatelessWidget {
     required this.board,
     required this.isAnimated,
     required this.onEditName,
+    required this.onEditAvatar,
     required this.onCreateRoutine,
     required this.onToggleRoutine,
     required this.onDeleteRoutine,
@@ -29,6 +32,7 @@ class ProfileView extends StatelessWidget {
   final HabitBoard board;
   final bool isAnimated;
   final VoidCallback onEditName;
+  final VoidCallback onEditAvatar;
   final VoidCallback onCreateRoutine;
   final void Function(Routine routine, bool isEnabled) onToggleRoutine;
   final ValueChanged<Routine> onDeleteRoutine;
@@ -39,6 +43,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String displayName = board.preferences.displayName;
+    final String? avatarPath = board.preferences.avatarPath;
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 22, 16, 110),
@@ -58,22 +63,29 @@ class ProfileView extends StatelessWidget {
           child: SectionCard(
             child: Row(
               children: <Widget>[
-                Container(
-                  width: 60,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: CadenceColors.textAt(0.16)),
-                  ),
-                  child: Text(
-                    displayName.isEmpty
-                        ? '—'
-                        : displayName.substring(0, 1).toUpperCase(),
-                    style: CadenceTextStyles.figure(
-                      size: 22,
-                      color: CadenceColors.textAt(0.7),
+                Pressable(
+                  onPressed: onEditAvatar,
+                  semanticLabel: 'Changer la photo de profil',
+                  isAnimated: isAnimated,
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: CadenceColors.textAt(0.16)),
                     ),
+                    child: avatarPath == null
+                        ? _AvatarInitial(displayName: displayName)
+                        : Image.file(
+                            File(avatarPath),
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) =>
+                                _AvatarInitial(displayName: displayName),
+                          ),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -164,7 +176,7 @@ class ProfileView extends StatelessWidget {
                   hasDivider: index < board.routines.length - 1,
                   onToggle: (bool isEnabled) =>
                       onToggleRoutine(board.routines[index], isEnabled),
-                  onLongPress: () => onDeleteRoutine(board.routines[index]),
+                  onDelete: () => onDeleteRoutine(board.routines[index]),
                 ),
             ],
           ),
@@ -208,26 +220,43 @@ class ProfileView extends StatelessWidget {
   }
 }
 
+class _AvatarInitial extends StatelessWidget {
+  const _AvatarInitial({required this.displayName});
+
+  final String displayName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      displayName.isEmpty ? '—' : displayName.substring(0, 1).toUpperCase(),
+      style: CadenceTextStyles.figure(
+        size: 22,
+        color: CadenceColors.textAt(0.7),
+      ),
+    );
+  }
+}
+
 class _RoutineRow extends StatelessWidget {
   const _RoutineRow({
     required this.routine,
     required this.isAnimated,
     required this.hasDivider,
     required this.onToggle,
-    required this.onLongPress,
+    required this.onDelete,
   });
 
   final Routine routine;
   final bool isAnimated;
   final bool hasDivider;
   final ValueChanged<bool> onToggle;
-  final VoidCallback onLongPress;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onLongPress: onLongPress,
+      onLongPress: onDelete,
       child: Container(
         constraints: const BoxConstraints(minHeight: 58),
         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -260,6 +289,25 @@ class _RoutineRow extends StatelessWidget {
               isAnimated: isAnimated,
               semanticLabel: 'Activer ${routine.name}',
               onChanged: onToggle,
+            ),
+            const SizedBox(width: 12),
+            Pressable(
+              onPressed: onDelete,
+              semanticLabel: 'Supprimer ${routine.name}',
+              child: Container(
+                width: 34,
+                height: 34,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: CadenceColors.outline),
+                ),
+                child: Icon(
+                  CadenceIcons.trash,
+                  size: 14,
+                  color: CadenceColors.textAt(0.6),
+                ),
+              ),
             ),
           ],
         ),

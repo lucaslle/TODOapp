@@ -189,6 +189,11 @@ class HabitCubit extends Cubit<HabitState> {
     await _reload();
   }
 
+  Future<void> setAvatarPath(String? path) async {
+    await _savePreferences(avatarPath: path, clearAvatarPath: path == null);
+    await _reload();
+  }
+
   void goToNextOnboardingStep() {
     if (state.isOnLastOnboardingStep) return;
     emit(state.copyWith(onboardingStep: state.onboardingStep + 1));

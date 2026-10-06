@@ -24,6 +24,9 @@ class UserPreferencesGatewayImpl implements UserPreferencesGateway {
         PreferencesLocalDataSource.displayNameKey,
         '',
       ),
+      avatarPath: _localDataSource.readNullableString(
+        PreferencesLocalDataSource.avatarPathKey,
+      ),
       totalXp: _localDataSource.readInt(
         PreferencesLocalDataSource.totalXpKey,
         0,
@@ -52,6 +55,10 @@ class UserPreferencesGatewayImpl implements UserPreferencesGateway {
     await _localDataSource.writeString(
       PreferencesLocalDataSource.displayNameKey,
       preferences.displayName,
+    );
+    await _localDataSource.writeNullableString(
+      PreferencesLocalDataSource.avatarPathKey,
+      preferences.avatarPath,
     );
     await _localDataSource.writeInt(
       PreferencesLocalDataSource.totalXpKey,

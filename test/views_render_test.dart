@@ -280,6 +280,7 @@ void main() {
         board: board(routines: <Routine>[routine()]),
         isAnimated: true,
         onEditName: () {},
+        onEditAvatar: () {},
         onCreateRoutine: () {},
         onToggleRoutine: (_, _) {},
         onDeleteRoutine: (_) {},

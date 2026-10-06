@@ -89,7 +89,7 @@ class StatsView extends StatelessWidget {
               if (stats.insights.isEmpty)
                 const EmptyState(
                   title: 'Pas encore de tendance.',
-                  body: 'Quelques jours de plus et Cadence pourra dire quelque '
+                  body: 'Quelques jours de plus et Momentum pourra dire quelque '
                       'chose d’utile sur ton rythme.',
                 ),
               for (int index = 0; index < stats.insights.length; index++)

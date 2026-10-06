@@ -9,6 +9,7 @@ class PreferencesLocalDataSource {
   final SharedPreferences _preferences;
 
   static const String displayNameKey = 'display_name';
+  static const String avatarPathKey = 'avatar_path';
   static const String totalXpKey = 'total_xp';
   static const String hasCompletedOnboardingKey = 'has_completed_onboarding';
   static const String isReminderEnabledKey = 'is_reminder_enabled';

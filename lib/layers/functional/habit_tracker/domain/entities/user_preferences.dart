@@ -13,10 +13,12 @@ class UserPreferences extends Equatable {
     required this.areEffectsEnabled,
     required this.lastRolloverDay,
     required this.lastQuestRewardDay,
+    this.avatarPath,
   });
 
   const UserPreferences.initial()
     : displayName = '',
+      avatarPath = null,
       totalXp = 0,
       hasCompletedOnboarding = false,
       isReminderEnabled = true,
@@ -25,6 +27,9 @@ class UserPreferences extends Equatable {
       lastQuestRewardDay = null;
 
   final String displayName;
+
+  /// Path of the profile photo copied into the app's own storage, if any.
+  final String? avatarPath;
   final int totalXp;
   final bool hasCompletedOnboarding;
   final bool isReminderEnabled;
@@ -47,8 +52,11 @@ class UserPreferences extends Equatable {
     bool? areEffectsEnabled,
     DayKey? lastRolloverDay,
     DayKey? lastQuestRewardDay,
+    String? avatarPath,
+    bool clearAvatarPath = false,
   }) => UserPreferences(
     displayName: displayName ?? this.displayName,
+    avatarPath: clearAvatarPath ? null : avatarPath ?? this.avatarPath,
     totalXp: totalXp ?? this.totalXp,
     hasCompletedOnboarding:
         hasCompletedOnboarding ?? this.hasCompletedOnboarding,
@@ -61,6 +69,7 @@ class UserPreferences extends Equatable {
   @override
   List<Object?> get props => <Object?>[
     displayName,
+    avatarPath,
     totalXp,
     hasCompletedOnboarding,
     isReminderEnabled,

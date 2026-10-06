@@ -1,10 +1,10 @@
-# Cadence
+# Momentum
 
 Une to-do list gamifiée, noir et blanc, **100 % locale**. Aucun compte, aucun
 serveur, aucune API : tâches, routines, série, XP et statistiques vivent dans une
 base SQLite sur le téléphone.
 
-Implémentation Flutter de la maquette *Cadence — to-do gamifiée*.
+Implémentation Flutter de la maquette *Momentum — to-do gamifiée*.
 
 ## Installer l'APK
 
@@ -30,7 +30,7 @@ flutter build apk --release
 
 ## Comment l'app fonctionne
 
-**Le jour.** À chaque ouverture, Cadence rattrape les jours écoulés : les jours
+**Le jour.** À chaque ouverture, Momentum rattrape les jours écoulés : les jours
 passés sont archivés en `day_logs`, les tâches ponctuelles encore ouvertes
 remontent à aujourd'hui, et les routines actives réimpriment leurs étapes. Une
 étape de routine manquée reste sur le jour qui la demandait.

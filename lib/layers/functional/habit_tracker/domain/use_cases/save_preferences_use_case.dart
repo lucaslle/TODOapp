@@ -13,10 +13,14 @@ class SavePreferencesUseCase {
     bool? hasCompletedOnboarding,
     bool? isReminderEnabled,
     bool? areEffectsEnabled,
+    String? avatarPath,
+    bool clearAvatarPath = false,
   }) async {
     final UserPreferences current = await _preferencesGateway.read();
     final UserPreferences updated = current.copyWith(
       displayName: displayName?.trim(),
+      avatarPath: avatarPath,
+      clearAvatarPath: clearAvatarPath,
       hasCompletedOnboarding: hasCompletedOnboarding,
       isReminderEnabled: isReminderEnabled,
       areEffectsEnabled: areEffectsEnabled,

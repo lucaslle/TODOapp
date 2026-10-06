@@ -156,7 +156,7 @@ class CadenceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cadence',
+      title: 'Momentum',
       debugShowCheckedModeBanner: false,
       theme: CadenceTheme.build(),
       home: BlocProvider<HabitCubit>(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../technical/theme/cadence_colors.dart';
 import '../../../../technical/theme/cadence_icons.dart';
+import '../../../../technical/media/profile_photo_service.dart';
 import '../../../../technical/theme/cadence_motion.dart';
 import '../../../../technical/theme/widgets/pressable.dart';
 import '../../domain/entities/habit_board.dart';
@@ -15,6 +16,7 @@ import '../widgets/cadence_sheet.dart';
 import '../widgets/cheer_overlay.dart';
 import '../widgets/confirm_sheet.dart';
 import '../widgets/level_up_overlay.dart';
+import '../widgets/photo_actions_sheet.dart';
 import '../widgets/task_composer_sheet.dart';
 import '../widgets/task_detail_sheet.dart';
 import 'onboarding_view.dart';
@@ -132,6 +134,31 @@ class _HabitHomeViewState extends State<HabitHomeView>
     if (name != null) await cubit.setDisplayName(name);
   }
 
+  Future<void> _editAvatar(HabitBoard board) async {
+    final HabitCubit cubit = context.read<HabitCubit>();
+    const ProfilePhotoService photoService = ProfilePhotoService();
+    final String? currentPath = board.preferences.avatarPath;
+
+    PhotoAction action = PhotoAction.choose;
+    if (currentPath != null) {
+      final PhotoAction? chosen = await CadenceSheet.show<PhotoAction>(
+        context: context,
+        builder: (BuildContext context) => const PhotoActionsSheet(),
+      );
+      if (chosen == null) return;
+      action = chosen;
+    }
+
+    switch (action) {
+      case PhotoAction.choose:
+        final String? newPath = await photoService.pickFromGallery();
+        if (newPath != null) await cubit.setAvatarPath(newPath);
+      case PhotoAction.remove:
+        await cubit.setAvatarPath(null);
+        await photoService.delete(currentPath);
+    }
+  }
+
   Widget _buildTab(HabitState state, HabitBoard board) => switch (state.tab) {
     AppTab.today => TodayView(
       board: board,
@@ -155,6 +182,7 @@ class _HabitHomeViewState extends State<HabitHomeView>
       board: board,
       isAnimated: state.areEffectsEnabled,
       onEditName: () => _editDisplayName(board),
+      onEditAvatar: () => _editAvatar(board),
       onCreateRoutine: () => _openComposer(tabIndex: 1),
       onToggleRoutine: (Routine routine, bool isEnabled) => context
           .read<HabitCubit>()
