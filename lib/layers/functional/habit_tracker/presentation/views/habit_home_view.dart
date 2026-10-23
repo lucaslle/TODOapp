@@ -211,6 +211,7 @@ class _HabitHomeViewState extends State<HabitHomeView>
           if (state.isOnboardingVisible) {
             return OnboardingView(
               step: state.onboardingStep,
+              initialDisplayName: board.preferences.displayName,
               isAnimated: state.areEffectsEnabled,
               onNext: () => context.read<HabitCubit>().goToNextOnboardingStep(),
               onFinish: (String name) =>

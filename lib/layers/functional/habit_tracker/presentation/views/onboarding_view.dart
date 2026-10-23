@@ -6,6 +6,7 @@ import '../../../../technical/theme/cadence_colors.dart';
 import '../../../../technical/theme/cadence_icons.dart';
 import '../../../../technical/theme/cadence_motion.dart';
 import '../../../../technical/theme/cadence_text_styles.dart';
+import '../../../../technical/theme/widgets/momentum_logo.dart';
 import '../../../../technical/theme/widgets/pill_button.dart';
 
 /// Four cards: what the app is for, how progress works, where the data lives,
@@ -16,6 +17,7 @@ class OnboardingView extends StatefulWidget {
     required this.isAnimated,
     required this.onNext,
     required this.onFinish,
+    this.initialDisplayName = '',
     super.key,
   });
 
@@ -24,12 +26,18 @@ class OnboardingView extends StatefulWidget {
   final VoidCallback onNext;
   final void Function(String displayName) onFinish;
 
+  /// What the name field starts with, so replaying the cards or skipping
+  /// them never erases a name already given.
+  final String initialDisplayName;
+
   @override
   State<OnboardingView> createState() => _OnboardingViewState();
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-  final TextEditingController _nameController = TextEditingController();
+  late final TextEditingController _nameController = TextEditingController(
+    text: widget.initialDisplayName,
+  );
 
   static const List<({String title, String body, String cta})> _cards =
       <({String title, String body, String cta})>[
@@ -189,7 +197,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                       fontSize: 13,
                       horizontalPadding: 10,
                       isAnimated: widget.isAnimated,
-                      onPressed: () => widget.onFinish(''),
+                      onPressed: () => widget.onFinish(widget.initialDisplayName),
                     ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -212,7 +220,8 @@ class _OnboardingViewState extends State<OnboardingView> {
   }
 }
 
-/// The ring that fills one quarter per card, with the step number inside.
+/// The ring that fills one quarter per card. The first card carries the logo,
+/// the others the step number.
 class _StepRing extends StatelessWidget {
   const _StepRing({
     required this.step,
@@ -245,7 +254,10 @@ class _StepRing extends StatelessWidget {
               );
             },
           ),
-          Text(
+          if (step == 1)
+            const MomentumLogo(size: 84)
+          else
+            Text(
             step.toString().padLeft(2, '0'),
             style: CadenceTextStyles.figure(
               size: 44,

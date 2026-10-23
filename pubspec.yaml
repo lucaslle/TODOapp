@@ -40,11 +40,12 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.6
   shared_preferences: ^2.5.5
-  phosphor_flutter: ^2.1.0
+  phosphor_glyphs: ^2.1.2
   intl: ^0.20.3
   flutter_local_notifications: ^22.3.1
   timezone: ^0.11.1
   image_picker: ^1.1.2
+  sqflite_common_ffi_web: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -57,12 +58,16 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   sqflite_common_ffi: ^2.4.0+3
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/logo/
 
   fonts:
     - family: Inter
@@ -83,3 +88,15 @@ flutter:
           weight: 500
         - asset: assets/fonts/JetBrainsMono-Bold.ttf
           weight: 700
+
+# The app icon on every platform comes from the Momentum logo. Regenerate with
+# `dart run flutter_launcher_icons`.
+flutter_launcher_icons:
+  image_path: assets/logo/momentum-icon.png
+  android: true
+  ios: false
+  web:
+    generate: true
+    image_path: assets/logo/momentum-icon.png
+    background_color: "#0B0B0E"
+    theme_color: "#0B0B0E"

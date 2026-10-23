@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 /// The on-device store. Cadence has no backend: this file is the whole
 /// database, and it never leaves the phone.
@@ -24,6 +26,9 @@ class CadenceDatabase {
     final Database? current = _database;
     if (current != null) return current;
 
+    // The browser has no SQLite of its own: the web demo runs it as
+    // WebAssembly, in the page itself, with the file kept in IndexedDB.
+    if (kIsWeb) databaseFactory = databaseFactoryFfiWebNoWebWorker;
     final String path = p.join(await getDatabasesPath(), fileName);
     final Database database = await openDatabase(
       path,

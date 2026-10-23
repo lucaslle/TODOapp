@@ -6,6 +6,11 @@ base SQLite sur le téléphone.
 
 Implémentation Flutter de la maquette *Momentum — to-do gamifiée*.
 
+**Démo en ligne : [lucaslle.github.io/TODOapp](https://lucaslle.github.io/TODOapp/)**. Sur ordinateur,
+l'app s'affiche dans un cadre d'iPhone ; sur téléphone, elle occupe tout l'écran.
+Huit semaines d'historique d'exemple sont déjà remplies et les données restent
+dans le navigateur.
+
 ## Installer l'APK
 
 Les APK de release sont dans `build/app/outputs/flutter-apk/` :
@@ -27,6 +32,23 @@ des sources inconnues si Android le demande.
 ```bash
 flutter build apk --release
 ```
+
+## Démo web
+
+La démo est publiée sur GitHub Pages à chaque push sur `main`
+(`.github/workflows/web-demo.yml`), avec l'APK Android à côté (`momentum.apk`,
+téléchargeable par le QR code de la page). Pour la construire en local :
+
+```bash
+dart run sqflite_common_ffi_web:setup
+flutter build web --release --dart-define=MOMENTUM_DEMO=true --no-web-resources-cdn
+```
+
+`MOMENTUM_DEMO=true` remplit une installation neuve avec huit semaines
+d'historique cohérent (`seed_demo_data_use_case.dart`) : série de 24 jours,
+record de 31, un gel dépensé, niveau 13 à quelques XP du suivant. Sur le web,
+SQLite tourne en WebAssembly et sa base vit dans IndexedDB ; le rappel du soir
+est absent.
 
 ## Comment l'app fonctionne
 
@@ -85,7 +107,7 @@ les doublures de `test/fakes/`.
 flutter test
 ```
 
-40 tests : l'échelle des niveaux, la série et ses gels, la bascule de jour, la
+60 tests : l'échelle des niveaux, les données de la démo, la série et ses gels, la bascule de jour, la
 complétion et son bonus de quête, plus le rendu de chaque écran à taille
 téléphone (un débordement de layout y fait échouer le test).
 

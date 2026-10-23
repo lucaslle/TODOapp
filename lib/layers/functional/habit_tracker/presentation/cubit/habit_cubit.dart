@@ -19,6 +19,7 @@ import '../../domain/use_cases/load_month_calendar_use_case.dart';
 import '../../domain/use_cases/load_stats_use_case.dart';
 import '../../domain/use_cases/roll_over_day_use_case.dart';
 import '../../domain/use_cases/save_preferences_use_case.dart';
+import '../../domain/use_cases/seed_demo_data_use_case.dart';
 import '../../domain/use_cases/seed_starter_routines_use_case.dart';
 import '../../domain/use_cases/set_routine_enabled_use_case.dart';
 import '../../domain/use_cases/undo_task_completion_use_case.dart';
@@ -40,6 +41,7 @@ class HabitCubit extends Cubit<HabitState> {
     required DeleteRoutineUseCase deleteRoutine,
     required SavePreferencesUseCase savePreferences,
     required ReminderGateway reminderGateway,
+    SeedDemoDataUseCase? seedDemoData,
   }) : _rollOverDay = rollOverDay,
        _seedStarterRoutines = seedStarterRoutines,
        _loadBoard = loadBoard,
@@ -54,6 +56,7 @@ class HabitCubit extends Cubit<HabitState> {
        _deleteRoutine = deleteRoutine,
        _savePreferences = savePreferences,
        _reminderGateway = reminderGateway,
+       _seedDemoData = seedDemoData,
        super(const HabitState());
 
   final RollOverDayUseCase _rollOverDay;
@@ -71,10 +74,15 @@ class HabitCubit extends Cubit<HabitState> {
   final SavePreferencesUseCase _savePreferences;
   final ReminderGateway _reminderGateway;
 
+  /// Only the online demo has one: it fills the board before the first
+  /// roll-over, so a visitor lands on a lived-in app.
+  final SeedDemoDataUseCase? _seedDemoData;
+
   Timer? _cheerTimer;
 
   Future<void> start() async {
     emit(state.copyWith(status: HabitStatus.loading));
+    await _seedDemoData?.call();
     await _seedStarterRoutines();
     await _rollOverDay();
     await _reload();

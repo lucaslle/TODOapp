@@ -1,7 +1,6 @@
-﻿import 'dart:io';
-
 import 'package:flutter/widgets.dart';
 
+import '../../../../technical/media/stored_image.dart';
 import '../../../../technical/theme/cadence_colors.dart';
 import '../../../../technical/theme/cadence_icons.dart';
 import '../../../../technical/theme/cadence_text_styles.dart';
@@ -78,8 +77,8 @@ class ProfileView extends StatelessWidget {
                     ),
                     child: avatarPath == null
                         ? _AvatarInitial(displayName: displayName)
-                        : Image.file(
-                            File(avatarPath),
+                        : storedImage(
+                            avatarPath,
                             width: 60,
                             height: 60,
                             fit: BoxFit.cover,

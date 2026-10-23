@@ -1,29 +1,28 @@
 import 'package:flutter/widgets.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphor_glyphs/phosphor_glyphs.dart';
 
 /// The icon set of the design system, named once so screens never repeat the
 /// style argument.
 abstract final class CadenceIcons {
-  static IconData get house => PhosphorIcons.house();
-  static IconData get houseFilled => PhosphorIcons.house(PhosphorIconsStyle.fill);
+  static const IconData house = PhosphorIconsRegular.house;
+  static const IconData houseFilled = PhosphorIconsFill.house;
 
-  static IconData get flame => PhosphorIcons.flame();
-  static IconData get flameFilled => PhosphorIcons.flame(PhosphorIconsStyle.fill);
+  static const IconData flame = PhosphorIconsRegular.flame;
+  static const IconData flameFilled = PhosphorIconsFill.flame;
 
-  static IconData get chart => PhosphorIcons.chartBar();
-  static IconData get chartFilled =>
-      PhosphorIcons.chartBar(PhosphorIconsStyle.fill);
+  static const IconData chart = PhosphorIconsRegular.chartBar;
+  static const IconData chartFilled = PhosphorIconsFill.chartBar;
 
-  static IconData get user => PhosphorIcons.user();
-  static IconData get userFilled => PhosphorIcons.user(PhosphorIconsStyle.fill);
+  static const IconData user = PhosphorIconsRegular.user;
+  static const IconData userFilled = PhosphorIconsFill.user;
 
-  static IconData get check => PhosphorIcons.check();
-  static IconData get checkFilled => PhosphorIcons.check(PhosphorIconsStyle.bold);
+  static const IconData check = PhosphorIconsRegular.check;
+  static const IconData checkFilled = PhosphorIconsBold.check;
 
-  static IconData get plus => PhosphorIcons.plus();
-  static IconData get minus => PhosphorIcons.minus();
-  static IconData get trash => PhosphorIcons.trash();
-  static IconData get arrowRight => PhosphorIcons.arrowRight();
-  static IconData get arrowUpRight => PhosphorIcons.arrowUpRight();
-  static IconData get pencil => PhosphorIcons.pencilSimple();
+  static const IconData plus = PhosphorIconsRegular.plus;
+  static const IconData minus = PhosphorIconsRegular.minus;
+  static const IconData trash = PhosphorIconsRegular.trash;
+  static const IconData arrowRight = PhosphorIconsRegular.arrowRight;
+  static const IconData arrowUpRight = PhosphorIconsRegular.arrowUpRight;
+  static const IconData pencil = PhosphorIconsRegular.pencilSimple;
 }
