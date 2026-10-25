@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/widgets.dart';
 
 import '../../../../technical/theme/cadence_colors.dart';
@@ -19,6 +21,12 @@ class CadenceNavBar extends StatelessWidget {
   final AppTab currentTab;
   final ValueChanged<AppTab> onTabSelected;
   final bool isAnimated;
+
+  static const double _blurSigma = 24;
+
+  /// A lifted surface tone at 90 % — enough to hide what scrolls beneath,
+  /// with a hint of it left to keep the glass feel.
+  static const Color _fill = Color(0xE6202027);
 
   static const List<({AppTab tab, String label})> _items =
       <({AppTab tab, String label})>[
@@ -62,22 +70,30 @@ class CadenceNavBar extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(999),
-        child: Container(
-          padding: const EdgeInsets.all(6),
-          color: const Color(0x14FFFFFF),
-          child: Row(
-            children: <Widget>[
-              for (final ({AppTab tab, String label}) item in _items)
-                Expanded(
-                  child: _NavItem(
-                    label: item.label,
-                    icon: _iconFor(item.tab, isActive: item.tab == currentTab),
-                    isActive: item.tab == currentTab,
-                    isAnimated: isAnimated,
-                    onPressed: () => onTabSelected(item.tab),
+        // Frosted rather than see-through: the list scrolling underneath is
+        // blurred and mostly covered, so the tabs stay readable over it.
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: _blurSigma, sigmaY: _blurSigma),
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            color: _fill,
+            child: Row(
+              children: <Widget>[
+                for (final ({AppTab tab, String label}) item in _items)
+                  Expanded(
+                    child: _NavItem(
+                      label: item.label,
+                      icon: _iconFor(
+                        item.tab,
+                        isActive: item.tab == currentTab,
+                      ),
+                      isActive: item.tab == currentTab,
+                      isAnimated: isAnimated,
+                      onPressed: () => onTabSelected(item.tab),
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,7 +137,9 @@ class _NavItem extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: isActive ? const Color(0x80FFFFFF) : CadenceColors.textAt(0),
+              color: isActive
+                  ? const Color(0x80FFFFFF)
+                  : CadenceColors.textAt(0),
             ),
             gradient: isActive
                 ? const LinearGradient(
